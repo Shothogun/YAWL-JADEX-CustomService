@@ -16,7 +16,7 @@
  * License along with YAWL. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package testService;
+package org.yawlfoundation.yawl.testService.TestService;
 
 import org.jdom2.Element;
 import org.yawlfoundation.yawl.elements.data.YParameter;
@@ -36,20 +36,19 @@ public class TestService extends InterfaceBWebsideController {
 
     // holds a session handle to the engine
     private String _handle = null;
-
+    
     private final String _engineUser = "testService";
     private final String _enginePassword = "yTest";
-
 
     public void handleEnabledWorkItemEvent(WorkItemRecord wir) {
         try {
 
             // connect only if not already connected
-            if (! connected()) _handle = connect(engineLogonName, engineLogonPassword);
+            if (! connected()) _handle = connect(_engineUser, _enginePassword);
 
             // checkout ... process ... checkin
             wir = checkOut(wir.getID(), _handle);
-            String result = updateStatus(wir);
+            String result = updateStatus("test");
             checkInWorkItem(wir.getID(), wir.getDataList(),
                             getOutputData(wir.getTaskID(), result), null,  _handle);
         }
@@ -78,16 +77,6 @@ public class TestService extends InterfaceBWebsideController {
 
     
     //********************* PRIVATE METHODS *************************************//
-
-    private String updateStatus(WorkItemRecord wir) {
-        String result ;
-        String msg = getStatusMsg(wir);
-        if (msg != null) {
-            result = updateStatus(msg);
-        }
-        else result = "Null status passed - Twitter update cancelled";
-        return result;
-    }
 
 
     private String updateStatus(String msg) {
